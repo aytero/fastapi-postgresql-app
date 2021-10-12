@@ -19,4 +19,3 @@ class Entry(EntryBase):
 
     class Config:
         orm_mode = True
-
