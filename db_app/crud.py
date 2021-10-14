@@ -1,9 +1,7 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import update
+from datetime import datetime
 
 from . import models, schemas
-
-from datetime import datetime
 
 
 def get_entry(db: Session, entry_id: int):
@@ -27,7 +25,7 @@ def get_entries(db: Session, offset: int = 0, limit: int = 100,
 def create_entry(db: Session, entry: schemas.EntryCreate):
     curr_dt = datetime.now()
     cur_timestamp = int(round(curr_dt.timestamp()))
-    db_entry = models.Entry(id = entry.id, value=entry.value, timestamp=cur_timestamp)
+    db_entry = models.Entry(id=entry.id, value=entry.value, timestamp=cur_timestamp)
     db.add(db_entry)
     db.commit()
     db.refresh(db_entry)
@@ -37,7 +35,8 @@ def create_entry(db: Session, entry: schemas.EntryCreate):
 def update_entry(db: Session, entry: schemas.EntryCreate):
     curr_dt = datetime.now()
     cur_timestamp = int(round(curr_dt.timestamp()))
-    db.query(models.Entry).filter(models.Entry.id == entry.id).update({'value': entry.value, 'timestamp': cur_timestamp})
+    db.query(models.Entry).filter(models.Entry.id == entry.id).\
+        update({'value': entry.value, 'timestamp': cur_timestamp})
     db.commit()
     q = get_entry(db, entry_id=entry.id)
     return q

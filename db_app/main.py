@@ -19,6 +19,7 @@ def get_db():
     finally:
         db.close()
 
+
 @app.post("/create_entry/", response_model=schemas.Entry)
 def create_entry(entry: schemas.EntryCreate, db: Session = Depends(get_db)):
     db_entry = crud.get_entry(db, entry_id=entry.id)
@@ -29,8 +30,8 @@ def create_entry(entry: schemas.EntryCreate, db: Session = Depends(get_db)):
 
 @app.get("/entries/", response_model=List[schemas.Entry])
 def read_entries(offset: int = 0, limit: int = 100,
-        id: int = None, value: str = None, timestamp: int = None,
-        db: Session = Depends(get_db)):
+                 id: int = None, value: str = None, timestamp: int = None,
+                 db: Session = Depends(get_db)):
     entries = crud.get_entries(db, offset=offset, limit=limit, id=id, value=value, timestamp=timestamp)
     return entries
 
